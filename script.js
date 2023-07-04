@@ -1,4 +1,5 @@
 var token = "1feed69f5f037a";
+var postalcode;
 function getData(){
     window.location.href = "./ipAddress.html";
 }
@@ -17,7 +18,8 @@ function getIpInfo(ipAddress){
     .then(data =>{
         console.log(data);
         renderData(data);
-        getPostalInfo(data.postal);
+        postalcode = data.postal;
+        getPostalInfo(postalcode);
     })
     .catch(error => console.log(error));
 }
@@ -37,11 +39,6 @@ fetchIP();
 function renderPostofficeCards(data){
     var message = document.getElementById('message');
     message.innerHTML = `<p ><b>Message: </b>${data.Message}</p>`;
-
-    var filterContainer = document.getElementById('filter-container');
-    filterContainer.innerHTML = `<span class="material-icons">search</span>
-    <input type="search" placeholder="Filter">`;
-
     var postOfficesContainer = document.getElementById("postOfficeCards");
     var postOffices = data.PostOffice;
     postOffices.forEach((postOffice)=>{
@@ -107,4 +104,49 @@ function convertDateTime(timezone){
     let date_time = day + "-" + month + "-" + year;
 
     return date_time+", "+time;
+}
+var searchElement = document.getElementById('search');
+searchElement.addEventListener('keyup',event =>{
+    event.preventDefault();
+    debounce(filterData(searchElement.value), 300);
+})
+function filterData(searchInput){
+    searchInput = searchInput.toLowerCase();
+    fetch(`https://api.postalpincode.in/pincode/${postalcode}`)
+    .then(res => res.json())
+    .then(data =>{
+        const result = (data[0].PostOffice).filter(office => {
+            return office.Name.toLowerCase().includes(searchInput) ||
+            office.District.toLowerCase().includes(searchInput) ||
+            office.Division.toLowerCase().includes(searchInput) ||
+            office.BranchType.toLowerCase().includes(searchInput);
+        });
+        displayFilterData(result);
+
+    })
+    .catch(error => console.log(error));
+}
+
+function debounce(func, timeout = 300){
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { func.apply(this, args); }, timeout);
+    };
+}
+
+function displayFilterData(data){
+    var postOfficesContainer = document.getElementById("postOfficeCards");
+    postOfficesContainer.innerHTML = "";
+    data.forEach((postOffice)=>{
+        var card = document.createElement('div');
+        card.setAttribute('id','postOffice');
+        card.innerHTML = `<p><b>Name: </b>${postOffice.Name}</p>
+        <p><b>Branch Type: </b>${postOffice.BranchType}</p>
+        <p><b>Delivery Status: </b>${postOffice.DeliveryStatus}</p>
+        <p><b>District: </b>${postOffice.District}</p>
+        <p><b>Division: </b>${postOffice.Division}</p>
+        `;
+        postOfficesContainer.append(card);
+    }); 
 }
