@@ -47,11 +47,11 @@ function renderPostofficeCards(data){
     postOffices.forEach((postOffice)=>{
         var card = document.createElement('div');
         card.setAttribute('id','postOffice');
-        card.innerHTML = `<p>Name: ${postOffice.Name}</p>
-        <p>Branch Type: ${postOffice.BranchType}</p>
-        <p>Delivery Status: ${postOffice.DeliveryStatus}</p>
-        <p>District: ${postOffice.District}</p>
-        <p>Division: ${postOffice.Division}</p>
+        card.innerHTML = `<p><b>Name: </b>${postOffice.Name}</p>
+        <p><b>Branch Type: </b>${postOffice.BranchType}</p>
+        <p><b>Delivery Status: </b>${postOffice.DeliveryStatus}</p>
+        <p><b>District: </b>${postOffice.District}</p>
+        <p><b>Division: </b>${postOffice.Division}</p>
         `;
         postOfficesContainer.append(card);
     }); 
