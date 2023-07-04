@@ -117,8 +117,6 @@ function filterData(searchInput){
     .then(data =>{
         const result = (data[0].PostOffice).filter(office => {
             return office.Name.toLowerCase().includes(searchInput) ||
-            office.District.toLowerCase().includes(searchInput) ||
-            office.Division.toLowerCase().includes(searchInput) ||
             office.BranchType.toLowerCase().includes(searchInput);
         });
         displayFilterData(result);
