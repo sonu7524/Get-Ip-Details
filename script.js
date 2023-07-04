@@ -1,5 +1,4 @@
 var token = "1feed69f5f037a";
-var postalcode;
 function getData(){
     window.location.href = "./ipAddress.html";
 }
@@ -9,6 +8,7 @@ function fetchIP(){
     .then(res => res.json())
     .then(data =>{
         getIpInfo(data.ip);
+        getIp(data.ip);
     })
     .catch(error => console.log(error));
 }
@@ -18,8 +18,7 @@ function getIpInfo(ipAddress){
     .then(data =>{
         console.log(data);
         renderData(data);
-        postalcode = data.postal;
-        getPostalInfo(postalcode);
+        getPostalInfo(data.postal);
     })
     .catch(error => console.log(error));
 }
@@ -35,6 +34,12 @@ function getPostalInfo(pincode){
 }
 
 fetchIP();
+
+function getIp(ipAddress){
+    var ip = document.getElementById('ip-address');
+    ip.innerText = ipAddress;
+    ip.style.color = "red";
+}
 
 function renderPostofficeCards(data){
     var message = document.getElementById('message');
