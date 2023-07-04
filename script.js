@@ -138,15 +138,22 @@ function debounce(func, timeout = 300){
 function displayFilterData(data){
     var postOfficesContainer = document.getElementById("postOfficeCards");
     postOfficesContainer.innerHTML = "";
-    data.forEach((postOffice)=>{
-        var card = document.createElement('div');
-        card.setAttribute('id','postOffice');
-        card.innerHTML = `<p><b>Name: </b>${postOffice.Name}</p>
-        <p><b>Branch Type: </b>${postOffice.BranchType}</p>
-        <p><b>Delivery Status: </b>${postOffice.DeliveryStatus}</p>
-        <p><b>District: </b>${postOffice.District}</p>
-        <p><b>Division: </b>${postOffice.Division}</p>
-        `;
-        postOfficesContainer.append(card);
-    }); 
+
+    if(data.length === 0){
+        postOfficesContainer.innerHTML = `<p>No Result Found</p>`;
+    }
+    else{
+        data.forEach((postOffice)=>{
+            var card = document.createElement('div');
+            card.setAttribute('id','postOffice');
+            card.innerHTML = `<p><b>Name: </b>${postOffice.Name}</p>
+            <p><b>Branch Type: </b>${postOffice.BranchType}</p>
+            <p><b>Delivery Status: </b>${postOffice.DeliveryStatus}</p>
+            <p><b>District: </b>${postOffice.District}</p>
+            <p><b>Division: </b>${postOffice.Division}</p>
+            `;
+            postOfficesContainer.append(card);
+        }); 
+    }
+    
 }
