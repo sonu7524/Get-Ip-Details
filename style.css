@@ -75,7 +75,7 @@ input{
     padding: 20px;
     border-radius: 10px;
 }
-@media (max-width: 1168px) {
+@media (min-width: 840px) and (max-width: 1168px) {
     input{
         width: 90vw;
     }
@@ -83,13 +83,23 @@ input{
         flex-direction: column;
         gap: 0px;
     }
+    *{
+        font-size: medium;
+    }
 }
 @media (max-width:840px) {
     input{
         width: 80vw;
     }
+    #ip-details{
+        flex-direction: column;
+        gap: 0px;
+    }
     #postOfficeCards{
         display: flex;
         flex-direction: column;
+    }
+    *{
+        font-size: medium;
     }
 }
