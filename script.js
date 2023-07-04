@@ -29,7 +29,7 @@ function getPostalInfo(pincode){
     .then(res => res.json())
     .then(data =>{
         console.log(data[0]);
-        renderPostofficeCards(data[0]);
+        renderPostofficeCards(data[0].PostOffice);
     })
     .catch(error => console.log(error));
 }
@@ -38,10 +38,14 @@ fetchIP();
 
 function renderPostofficeCards(data){
     var message = document.getElementById('message');
-    message.innerHTML = `<p ><b>Message: </b>${data.Message}</p>`;
+    message.innerHTML = `<p ><b>Message: </b>Number of pincode(s) found: ${data.length}</p>`;
     var postOfficesContainer = document.getElementById("postOfficeCards");
-    var postOffices = data.PostOffice;
-    postOffices.forEach((postOffice)=>{
+    postOfficesContainer.innerHTML= "";
+    if(data.length === 0){
+        postOfficesContainer.innerHTML = `<p>No Result Found</p>`;
+    }
+    else{
+    data.forEach((postOffice)=>{
         var card = document.createElement('div');
         card.setAttribute('id','postOffice');
         card.innerHTML = `<p><b>Name: </b>${postOffice.Name}</p>
@@ -52,6 +56,7 @@ function renderPostofficeCards(data){
         `;
         postOfficesContainer.append(card);
     }); 
+}
 }
 
 function renderData(data){
@@ -119,7 +124,7 @@ function filterData(searchInput){
             return office.Name.toLowerCase().includes(searchInput) ||
             office.BranchType.toLowerCase().includes(searchInput);
         });
-        displayFilterData(result);
+        renderPostofficeCards(result);
 
     })
     .catch(error => console.log(error));
@@ -131,27 +136,4 @@ function debounce(func, timeout = 300){
       clearTimeout(timer);
       timer = setTimeout(() => { func.apply(this, args); }, timeout);
     };
-}
-
-function displayFilterData(data){
-    var postOfficesContainer = document.getElementById("postOfficeCards");
-    postOfficesContainer.innerHTML = "";
-
-    if(data.length === 0){
-        postOfficesContainer.innerHTML = `<p>No Result Found</p>`;
-    }
-    else{
-        data.forEach((postOffice)=>{
-            var card = document.createElement('div');
-            card.setAttribute('id','postOffice');
-            card.innerHTML = `<p><b>Name: </b>${postOffice.Name}</p>
-            <p><b>Branch Type: </b>${postOffice.BranchType}</p>
-            <p><b>Delivery Status: </b>${postOffice.DeliveryStatus}</p>
-            <p><b>District: </b>${postOffice.District}</p>
-            <p><b>Division: </b>${postOffice.Division}</p>
-            `;
-            postOfficesContainer.append(card);
-        }); 
-    }
-    
 }
